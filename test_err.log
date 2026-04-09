@@ -1,0 +1,65 @@
+Creating test database for alias 'default'...
+.....F.
+======================================================================
+FAIL: test_verify_otp_success_teacher (accounts.tests.OTPAuthTests.test_verify_otp_success_teacher)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Project\Tution App MAD\Backend\accounts\tests.py", line 39, in test_verify_otp_success_teacher
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+AssertionError: 400 != 200
+
+----------------------------------------------------------------------
+Ran 7 tests in 4.813s
+
+FAILED (failures=1)
+Destroying test database for alias 'default'...
+Found 7 test(s).
+System check identified no issues (0 silenced).
+
+========================================
+MOCK SMS SERVICE
+To: +919876543210
+Your KalviConnect OTP is: 969003
+It expires in 5 minutes.
+========================================
+
+
+========================================
+MOCK SMS SERVICE
+To: +919876543210
+Your KalviConnect OTP is: 123456
+It expires in 5 minutes.
+========================================
+
+
+========================================
+MOCK SMS SERVICE
+To: +919876543210
+Your KalviConnect OTP is: 123456
+It expires in 5 minutes.
+========================================
+
+
+========================================
+MOCK SMS SERVICE
+To: +919876543211
+Your KalviConnect OTP is: 083735
+It expires in 5 minutes.
+========================================
+
+
+========================================
+MOCK SMS SERVICE
+To: +919876543211
+Your KalviConnect OTP is: 350415
+It expires in 5 minutes.
+========================================
+
+
+========================================
+MOCK SMS SERVICE
+To: +919876543211
+Your KalviConnect OTP is: 831741
+It expires in 5 minutes.
+========================================
+
