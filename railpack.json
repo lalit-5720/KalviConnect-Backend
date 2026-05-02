@@ -1,0 +1,3 @@
+{
+  "start": "gunicorn kalviconnect_config.wsgi:application"
+}
