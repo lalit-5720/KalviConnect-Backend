@@ -31,7 +31,8 @@ class SendOTPView(views.APIView):
     throttle_classes = [OTPRateThrottle]
 
     def post(self, request, *args, **kwargs):
-        serializer = SendOTPSerializer(data=request.data)
+        data = request.data[0] if isinstance(request.data, list) and request.data else request.data
+        serializer = SendOTPSerializer(data=data)
         if serializer.is_valid():
             phone = serializer.validated_data['phone']
             try:
@@ -48,11 +49,13 @@ class VerifyOTPView(views.APIView):
 
     def post(self, request, *args, **kwargs):
         print(f"--- Frontend Data Received ---")
+        data = request.data[0] if isinstance(request.data, list) and request.data else request.data
         print(f"Raw Request Data: {request.data}")
+        print(f"Data after processing: {data}")
         print(f"Role in Request Data: {request.data.get('role')}")
         print(f"------------------------------")
         
-        serializer = VerifyOTPSerializer(data=request.data)
+        serializer = VerifyOTPSerializer(data=data)
         if serializer.is_valid():
             phone = serializer.validated_data['phone']
             otp = serializer.validated_data['otp']
@@ -127,7 +130,8 @@ class LogoutView(views.APIView):
 
     def post(self, request):
         try:
-            refresh_token = request.data.get("refresh")
+            data = request.data[0] if isinstance(request.data, list) and request.data else request.data
+            refresh_token = data.get("refresh") if isinstance(data, dict) else None
             if not refresh_token:
                 return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
                 
