@@ -10,7 +10,7 @@ OTP_TO_TEST = '123456' # <-- Put your OTP here and run!
 req_verify = urllib.request.Request(
     base_url + 'verify-otp/',
     data=json.dumps({
-        'phone': '+919876543210', 
+        'phone': '+916383205635', 
         'otp': OTP_TO_TEST,
         'role': 'teacher'  # <-- THIS IS REQUIRED!
     }).encode('utf-8'),

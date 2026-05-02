@@ -3,7 +3,7 @@ import urllib.request
 import urllib.error
 
 url = 'http://127.0.0.1:8000/api/auth/send-otp/'
-data = json.dumps({'phone': '9876543210'}).encode('utf-8')
+data = json.dumps({'phone': '6383205635'}).encode('utf-8')
 req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
 
 try:

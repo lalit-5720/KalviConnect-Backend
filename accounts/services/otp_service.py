@@ -1,8 +1,10 @@
 import random
 import string
+import requests
 from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
+from django.conf import settings
 from accounts.models import OTPVerification
 
 class OTPService:
@@ -16,8 +18,7 @@ class OTPService:
     @classmethod
     def send_otp(cls, phone):
         """
-        Generate, store, and 'send' the OTP. 
-        In development, we print to the console.
+        Generate, store, and send the OTP using Fast2SMS API.
         """
         otp = cls.generate_otp()
         hashed_otp = make_password(otp)
@@ -30,13 +31,37 @@ class OTPService:
             expires_at=expires_at
         )
 
-        # Mock Sending OTP
-        print(f"\n{'='*40}")
-        print(f"MOCK SMS SERVICE")
-        print(f"To: {phone}")
-        print(f"Your KalviConnect OTP is: {otp}")
-        print(f"It expires in {cls.OTP_EXPIRY_MINUTES} minutes.")
-        print(f"{'='*40}\n")
+        api_key = getattr(settings, 'FAST2SMS_API_KEY', '')
+        if not api_key:
+            print(f"WARNING: FAST2SMS_API_KEY is not set. OTP {otp} for {phone} was NOT sent.")
+            return otp_record, otp
+
+        # Fast2SMS requires 10-digit numbers without the country code
+        clean_phone = phone.replace('+91', '') if phone.startswith('+91') else phone
+
+        # Fast2SMS OTP API call
+        url = "https://www.fast2sms.com/dev/bulkV2"
+        payload = {
+            "route": "q",
+            "message": f"Your KalviConnect verification code is: {otp}",
+            "language": "english",
+            "flash": 0,
+            "numbers": clean_phone
+        }
+        headers = {
+            'authorization': api_key,
+            'Content-Type': "application/x-www-form-urlencoded"
+        }
+
+        try:
+            response = requests.post(url, data=payload, headers=headers)
+            response_data = response.json()
+            if response_data.get('return') == True:
+                print(f"SMS successfully sent to {phone}")
+            else:
+                print(f"Fast2SMS API Error: {response_data.get('message')}")
+        except Exception as e:
+            print(f"Failed to send SMS to {phone}. Error: {str(e)}")
 
         return otp_record, otp
 

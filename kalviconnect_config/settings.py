@@ -144,3 +144,6 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# Fast2SMS Configuration
+FAST2SMS_API_KEY = config("FAST2SMS_API_KEY", default="")
