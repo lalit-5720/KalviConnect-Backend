@@ -8,6 +8,7 @@ from django.db.models import Sum, Q
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import get_object_or_404
+from decimal import Decimal
 
 from .models import Student, Mark, FeeRecord, Attendance, Announcement
 from .serializers import (
@@ -213,7 +214,7 @@ class FeeRecordViewSet(viewsets.ModelViewSet):
             if not fee_record:
                 return Response({"error": "No pending fees found for student."}, status=status.HTTP_404_NOT_FOUND)
             
-            fee_record.amount_paid += float(amount_paid)
+            fee_record.amount_paid += Decimal(str(amount_paid))
             fee_record.last_payment_date = date_paid
             if fee_record.amount_paid >= fee_record.total_amount:
                 fee_record.status = 'paid'
